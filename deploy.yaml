@@ -5,12 +5,13 @@
   hosts: all
   gather_facts: false
   tasks:
-    - name: Copy script
-      ansible.builtin.copy:
-        src: ./kickstart.sh
-        dest: /home/azadmin/kickstart.sh
+    - name: Render kickstart template
+      template:
+        src: infra.tpl
+        dest: kickstart.sh
+    - name: Fix script permissions
+      ansible.builtin.file:
+        path: kickstart.sh
         mode: u=rwx,g=r,o=r
     - name: Run script
-      ansible.builtin.shell: /home/azadmin/kickstart.sh
-
-
+      ansible.builtin.shell: sudo /home/azadmin/kickstart.sh
